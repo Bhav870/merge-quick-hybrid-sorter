@@ -1,15 +1,35 @@
 # Merge-Quick Hybrid Sorter
 
-A hybrid sorting algorithm that intelligently combines **Merge Sort**, **Quick Sort**, and **Insertion Sort** to optimize performance across different data sizes and distributions.
+A sorting algorithm that mixes Merge Sort, Quick Sort, and Insertion Sort together to try and get better performance than just using one of them alone.
 
-## Overview
+## What it does
 
-Instead of relying on a single sorting strategy, this project dynamically switches between algorithms based on the size and nature of the input data:
+Different sorting algorithms are good at different things:
+- Insertion Sort is fast for small arrays but slow for big ones
+- Quick Sort is fast on average but can get really slow on certain inputs
+- Merge Sort is reliable and always O(n log n), but uses more memory
 
-- **Insertion Sort** — used for small subarrays, where its low overhead outperforms more complex algorithms.
-- **Quick Sort** — used for average-case partitioning on larger datasets, offering fast in-place sorting.
-- **Merge Sort** — used as a fallback for worst-case scenarios (e.g., already sorted or adversarial inputs) to guarantee stable O(n log n) performance.
+So instead of picking just one, this project switches between them depending on the size of the array:
+- Small arrays → Insertion Sort
+- Bigger arrays → Quick Sort
+- If Quick Sort starts performing badly → falls back to Merge Sort
 
-This hybrid approach aims to combine the strengths of each algorithm while minimizing their individual weaknesses.
+## Files
 
-## Project Structure
+- `sorter.cpp` — the actual sorting logic, written in C++
+- `sorter_wasm.js` — lets the C++ code run in the browser using WebAssembly
+- `index.html` — a simple demo page to try it out
+
+## How to run it
+
+If you just want to try the demo, open `index.html` in your browser.
+
+If you want to rebuild the WebAssembly file yourself, you'll need Emscripten installed, then run:
+
+```bash
+emcc sorter.cpp -o sorter_wasm.js -O3 -s WASM=1
+```
+
+## Why I made this
+
+I wanted to see if combining sorting algorithms could actually give better real-world performance instead of just using Quick Sort or Merge Sort by itself.
